@@ -5,7 +5,7 @@ import os
 import re
 import pysam
 
-logger = logging.getLogger('utils')
+logger = logging.getLogger("utils")
 
 
 class NGSFileType(enum.Enum):
@@ -23,15 +23,20 @@ class NGSFile:
         self.readmode = "r"
         self.gzipped = False
 
-        if self.ext.endswith(".gz") or self.ext.endswith(
-                ".bgz") or self.ext.endswith(".bam"):
+        if (
+            self.ext.endswith(".gz")
+            or self.ext.endswith(".bgz")
+            or self.ext.endswith(".bam")
+        ):
             self.readmode = "rb"
             self.gzipped = True
 
-        if self.ext.endswith("fastq") or \
-           self.ext.endswith("fq") or \
-           self.ext.endswith("fastq.gz") or \
-           self.ext.endswith("fq.gz"):
+        if (
+            self.ext.endswith("fastq")
+            or self.ext.endswith("fq")
+            or self.ext.endswith("fastq.gz")
+            or self.ext.endswith("fq.gz")
+        ):
             self.filetype = NGSFileType.FASTQ
             if self.gzipped:
                 self.handle = gzip.open(self.filename, mode=self.readmode)
@@ -44,11 +49,11 @@ class NGSFile:
             self.filetype = NGSFileType.BAM
             self.handle = pysam.AlignmentFile(self.filename, self.readmode)
         else:
-            raise RuntimeError("Could not determine NGS file type: {}".format(
-                self.filename))
+            raise RuntimeError(
+                "Could not determine NGS file type: {}".format(self.filename)
+            )
 
-        logger.debug("Opened NGS file '{}' as {}".format(
-            self.filename, self.filetype))
+        logger.debug("Opened NGS file '{}' as {}".format(self.filename, self.filetype))
         logger.debug("Gzipped: {}".format(self.gzipped))
         logger.debug("Readmode: {}".format(self.readmode))
 
@@ -91,16 +96,12 @@ class NGSFile:
 
 
 class GFF:
-    def __init__(self,
-                 filename,
-                 feature_type=None,
-                 filters=None,
-                 gene_blacklist=None):
+    def __init__(self, filename, feature_type=None, filters=None, gene_blacklist=None):
         self.gene_blacklist = None
         if gene_blacklist:
-            self.gene_blacklist = set([
-                item.strip() for item in open(gene_blacklist, 'r').readlines()
-            ])
+            self.gene_blacklist = set(
+                [item.strip() for item in open(gene_blacklist, "r").readlines()]
+            )
         self._handle = gzip.open(filename, "r")
         self.feature_type = feature_type
         self.filters = filters
@@ -116,8 +117,15 @@ class GFF:
                 continue
 
             [
-                seqname, source, feature, start, end, score, strand, frame,
-                attribute
+                seqname,
+                source,
+                feature,
+                start,
+                end,
+                score,
+                strand,
+                frame,
+                attribute,
             ] = line.split("\t")
 
             if self.feature_type and feature != self.feature_type:
@@ -141,7 +149,7 @@ class GFF:
                 "end": int(end),
                 "score": score,
                 "strand": strand,
-                "frame": frame
+                "frame": frame,
             }
 
             for attr_raw in [s.strip() for s in attribute.split(";")]:
