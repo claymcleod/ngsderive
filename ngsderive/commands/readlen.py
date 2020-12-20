@@ -33,7 +33,7 @@ def main(
         read_lengths = defaultdict(int)
         try:
             ngsfile = NGSFile(ngsfilepath)
-        except:
+        except FileNotFoundError:
             result = {
                 "File": ngsfilepath,
                 "Evidence": "File not found.",

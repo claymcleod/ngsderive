@@ -199,7 +199,7 @@ def main(ngsfiles, outfile=sys.stdout, delimiter="\t", n_samples=10000):
     for ngsfilepath in ngsfiles:
         try:
             ngsfile = NGSFile(ngsfilepath)
-        except:
+        except FileNotFoundError:
             result = {
                 "File": ngsfilepath,
                 "Instrument": "File not found.",
