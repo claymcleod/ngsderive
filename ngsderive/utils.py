@@ -77,7 +77,7 @@ class NGSFile:
                 query_name = query_name.decode("utf-8")
                 query = query.decode("utf-8")
                 if self.store_qualities:
-                  quality = quality.decode("utf-8")
+                    quality = quality.decode("utf-8")
 
             if query_name.startswith("@"):
                 query_name = query_name[1:]
@@ -87,14 +87,14 @@ class NGSFile:
             query_name = read.query_name
             query = read.query_alignment_sequence
             if self.store_qualities:
-              quality = read.query_alignment_qualities
+                quality = read.query_alignment_qualities
 
         self.read_num += 1
 
         if self.store_qualities:
-          return {"query_name": query_name, "query": query, "quality": quality}
+            return {"query_name": query_name, "query": query, "quality": quality}
         else:
-          return {"query_name": query_name, "query": query}
+            return {"query_name": query_name, "query": query}
 
 
 class GFF:
@@ -172,9 +172,9 @@ class GFF:
             raise NotImplementedError("iteration in Dataframe mode not implemented")
         while True:
             if self.gzipped:
-                line = self._handle.readline().decode("utf-8")
+                line = self._handle.readline().decode("utf-8").strip()
             else:
-                line = self._handle.readline()
+                line = self._handle.readline().strip()
 
             if not line:
                 raise StopIteration
